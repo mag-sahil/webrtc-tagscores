@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Multi Conn App</title>
+    <link rel="stylesheet" href="/public/style.css">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/public/scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="/public/scripts/wrtchelper.js"></script>
+    <script src="/public/scripts/app.js"></script> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.5.0/RecordRTC.js"></script>
+
+
+    <script>
+        
+        $(function () {
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            var meeting_id = urlParams.get('mid');
+
+            if (!meeting_id) {
+                var murl = window.location.origin + "?mid=" +  (new Date()).getTime();
+                $('#meetingid').attr('href',murl).text(murl);
+                $("#meetingContainer").hide();
+                $("#meetingbox").show();
+                return;
+            }
+
+            var user_id = urlParams.get('uid');
+            var user_type = urlParams.get('type');
+            
+            if (!user_id) {
+                user_id = window.prompt('Enter your nick!');
+            }
+
+            if (!user_id || !meeting_id) {
+                alert('user id or meeting id missing');
+                return;
+            }
+            $("#meetingContainer").show();
+            $("#meetingbox").hide();
+            if(user_type=="candidate")
+            {
+            $(".show_candidate_notification").hide();
+            $(".chat_name").text("Admin");
+            }
+            setTimeout(function(){ $("#btnStartStopCam").click(); }, 2000);
+            
+
+            MyApp._init(user_id,meeting_id,user_type);
+            
+        
+
+        });
+    </script>
+</head>
+<body>
+
+    <div id="meetingContainer" style="display: none;" class="container-fluid">
+        <!--<h1 id='meetingname'></h1>-->
+        <input type="hidden" id="me_id">
+        <div class="row">
+           
+            <div id='divUsers' class="col-md-9">
+                <div id="me"  style="display:none!important;" class="userbox col-md-3" >
+                   
+                    <div>
+                        <video autoplay muted controls class="col-md-12"  id="localVideoCtr" />
+                    </div>
+                     <span class="user_name"></span>
+                </div>
+                <div id="otherTemplate" class="userbox col-md-3" style="display:none">
+                    <div>
+                        <video autoplay muted controls class="col-md-12" id="remoteVideoCtr111"></video>
+                        <audio autoplay controls style="display:none" id="remoteAudioCtr111"></audio>
+                    </div>
+                    <span class="user_name"></span>
+                    <i class="fa fa-comments Enable_chat" onclick="candidate_enable_chat(this)"></i>
+                    <i class="fa fa-microphone-slash Enable_mute" onclick="candidate_enable_voice(this)"></i>
+                </div>
+            </div>
+             <div  id="messages" class="col-md-3">
+             <div class="box box-warning direct-chat direct-chat-warning show_candidate_notification">
+                 <div class="box-header with-border">
+                        <h3 class="box-title">Candidate Notification Box</h3>
+                    </div>
+                      <div class="box-body scrollbar scrollbar-black bordered-black square thin">
+                        <div class="show_alert_message">
+                       
+                        </div>
+                    </div>
+             </div>
+             <div class="page-content page-container" id="page-content">
+        <div class="row  d-flex justify-content-center">
+            <div class="col-md-12">
+                <div class="box box-warning direct-chat direct-chat-warning">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Chat Messages (<span class="chat_name">All Candidate</span>)</h3>
+                        <!-- <div class="box-tools pull-right"> <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages">20</span> <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> </button> <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts"> <i class="fa fa-comments"></i></button> <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i> </button> </div> -->
+                    </div>
+                    <div class="box-body">
+                        <div class="direct-chat-messages">
+                       
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                       
+                            <div class="input-group"> <input type="text" name="message" id="msgbox" placeholder="Type Message ..." class="form-control"> <span class="input-group-btn"> <button data-id="" type="button" id="btnsend" class="btn btn-warning btn-flat" style="background-color: #f0ad4e!important; color:white;">Send</button> </span> </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+             
+              <!-- <div class="message_text"><textarea id="msgbox" class="col-md-10" /></textarea><button id="btnsend">Send</button></div>-->
+            </div>
+        </div>
+        </div>
+
+    
+        <div style="clear: both;"></div>
+        <div class="" style="display:none!important">
+            <button id="btnMuteUnmute" class="btnMuteUnmute">UnMute</button>
+            <button id="btnStartStopCam">Start Camera</button>
+            <button id="btnStartStopScreenshare">Screen Share</button>
+            <button id="btnResetMeeting">Reset Meeting</button>
+        </div>
+
+
+</body>
+</html>
+<script>
+function candidate_enable_voice(obj)
+{
+ var connection_id=$(obj).attr("data-id");
+ var status=$(obj).attr("data-status");
+ $("#btnMuteUnmute").attr("data-id",connection_id);
+/*
+console.log(status);
+    if($(obju
+    console.log("no");
+    $(obj).removeClass("fa-microphone");
+    $(obj).addClass("fa-microphone-slash");
+    }
+    */
+    
+    
+
+    
+     $("#btnMuteUnmute").click();
+}
+function candidate_enable_chat(obj)
+{
+ var connection_id=$(obj).attr("data-id");
+ var user_name=$(obj).attr("data-name");
+ var connection_id=$(obj).attr("data-id");
+ var Me_id=$("#me_id").val();
+  $("#btnsend").attr("data-id",connection_id);
+  $(".send_mess").hide();
+  $(".chat_name").text(user_name);
+  $(".send_mess_"+connection_id).show();
+  $(".send_mess_"+Me_id).show();
+}
+</script>
+
