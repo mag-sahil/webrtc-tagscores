@@ -19,10 +19,12 @@
 
 
     <script>
-        
+     const urlParams = new URLSearchParams(window.location.search);
+        var test_type="";
+        var test_type = urlParams.get('test_type');
         $(function () {
             
-            const urlParams = new URLSearchParams(window.location.search);
+           
             
             var meeting_id = urlParams.get('mid');
 
@@ -36,6 +38,7 @@
 
             var user_id = urlParams.get('uid');
             var user_type = urlParams.get('type');
+         
             
             if (!user_id) {
                 user_id = window.prompt('Enter your nick!');
@@ -139,6 +142,11 @@
 </body>
 </html>
 <script>
+console.log(test_type);
+if(test_type=='p')
+{
+$(".show_candidate_notification").hide();
+}
 function candidate_enable_voice(obj)
 {
  var connection_id=$(obj).attr("data-id");
