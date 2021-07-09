@@ -169,6 +169,8 @@ function EventBinding(){
 }
 
 function AddNewUser(other_user_id, connId) {
+ 
+ console.log(User_type);
     var $newDiv = $('#otherTemplate').clone();
     $newDiv = $newDiv.attr('id', connId).addClass('other');
     $newDiv.find('.user_name').text(other_user_id);
@@ -179,10 +181,16 @@ function AddNewUser(other_user_id, connId) {
     $newDiv.find('.Enable_chat').attr("data-name",other_user_id);
     $newDiv.find('video').attr('id', 'v_' + connId);
     $newDiv.find('audio').attr('id', 'a_' + connId);
+    if(User_type=="candidate")
+    {
+        $newDiv.hide();
+    }else{
     $newDiv.show();
+    }
     $('#divUsers').append($newDiv);
     $(".show_alert_message").prepend("<div class='alert alert-success alert-dismissible fade in message_"+connId+"'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Candidate("+other_user_id+") Connected Successfully!!</div>");
     $(".message_"+connId).delay(5000).fadeOut();
+   
 }
 
 return {
