@@ -183,7 +183,14 @@ function AddNewUser(other_user_id, connId) {
     $newDiv.find('audio').attr('id', 'a_' + connId);
     if(User_type=="candidate")
     {
+        if(test_type==p)
+        {
+           
+        }
+        else
+        {
         $newDiv.hide();
+        }
     }else{
     $newDiv.show();
     }
