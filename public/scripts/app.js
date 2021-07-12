@@ -204,7 +204,7 @@ function AddNewUser(other_user_id, connId) {
 
 return {
 
-    _init: function(uid,mid,user_type),test_type{
+    _init: function(uid,mid,user_type,test_type){
         init(uid,mid,user_type,test_type);
     }
 
