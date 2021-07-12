@@ -20,7 +20,7 @@
 
     <script>
      const urlParams = new URLSearchParams(window.location.search);
-        var test_type="";
+        var test_type="t";
         var test_type = urlParams.get('test_type');
         $(function () {
             
@@ -58,7 +58,7 @@
             setTimeout(function(){ $("#btnStartStopCam").click(); }, 2000);
             
 
-            MyApp._init(user_id,meeting_id,user_type);
+            MyApp._init(user_id,meeting_id,user_type,test_type);
             
         
 

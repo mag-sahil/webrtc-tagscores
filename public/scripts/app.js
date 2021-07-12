@@ -4,24 +4,26 @@ var socker_url = 'https://webrtc-tagscores.herokuapp.com/';
 var meeting_id = '';
 var user_id = '';
 var User_type = '';
+var test_type = '';
 
 var MyApp = (function(){
 
 
 
-function init(uid,mid,user_type){
+function init(uid,mid,user_type,test_type){
    
     SignalServerEventBinding();
-    create_user(uid,mid,user_type);
+    create_user(uid,mid,user_type,test_type);
     EventBinding();
 }
 
 
-function create_user(uid,mid,user_type){
+function create_user(uid,mid,user_type,test_type){
     
       user_id = uid;
     meeting_id = mid;
     User_type = user_type;
+    Test_type=test_type;
 
     $('#meetingname').text(meeting_id);
     $('#me h2').text(user_id + '(Me)');
@@ -183,7 +185,7 @@ function AddNewUser(other_user_id, connId) {
     $newDiv.find('audio').attr('id', 'a_' + connId);
     if(User_type=="candidate")
     {
-        if(test_type==p)
+        if(Test_type=="p")
         {
            
         }
@@ -202,8 +204,8 @@ function AddNewUser(other_user_id, connId) {
 
 return {
 
-    _init: function(uid,mid,user_type){
-        init(uid,mid,user_type);
+    _init: function(uid,mid,user_type),test_type{
+        init(uid,mid,user_type,test_type);
     }
 
 };
