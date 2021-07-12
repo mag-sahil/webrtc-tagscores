@@ -4,7 +4,7 @@ var socker_url = 'https://webrtc-tagscores.herokuapp.com/';
 var meeting_id = '';
 var user_id = '';
 var User_type = '';
-var test_type = '';
+var Test_type = '';
 
 var MyApp = (function(){
 
