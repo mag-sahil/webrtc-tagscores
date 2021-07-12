@@ -183,16 +183,9 @@ function AddNewUser(other_user_id, connId) {
     $newDiv.find('.Enable_chat').attr("data-name",other_user_id);
     $newDiv.find('video').attr('id', 'v_' + connId);
     $newDiv.find('audio').attr('id', 'a_' + connId);
-    if(User_type=="candidate")
+    if(User_type=="candidate" && Test_type=="t" )
     {
-        if(Test_type=="p")
-        {
-           
-        }
-        else
-        {
         $newDiv.hide();
-        }
     }else{
     $newDiv.show();
     }
