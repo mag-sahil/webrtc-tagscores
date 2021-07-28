@@ -1,6 +1,6 @@
 var socket = null;
 var socker_url = 'https://webrtc-tagscores.herokuapp.com/';
-//iu5420var socker_url = 'http://localhost:8000/';
+//var socker_url = 'http://localhost:8000/';
 var meeting_id = '';
 var user_id = '';
 var User_type = '';
