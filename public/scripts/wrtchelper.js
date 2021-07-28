@@ -119,7 +119,7 @@ var WrtcHelper = (function () {
                 vstream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         width: 720,
-                        height: 480,facingMode: 'user'
+                        height: 480
                     },
                     audio: true
                 });
@@ -128,7 +128,7 @@ var WrtcHelper = (function () {
                 vstream = await navigator.mediaDevices.getDisplayMedia({
                     video: {
                         width: 720,
-                        height: 480,facingMode: 'user'
+                        height: 480
                     },
                     audio: true
                 });
